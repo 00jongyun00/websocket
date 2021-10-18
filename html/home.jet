@@ -36,12 +36,13 @@
                 <label for="message">Message:</label>
                 <input type="text" name="message" id="message" class="form-control" autocomplete="off">
             </div>
-
             <hr>
             <a href="javascript:void(0);" class="btn btn-outline-secondary" id="sendBtn">Send Message</a>
             <input type="hidden" name="action" id="action">
-            <hr>
-            <div id="output" class="chatbox"></div>
+
+            <div id="status" class="mt-2 float-end">
+            </div>
+            <div id="output" class="chatbox mt-3"></div>
         </div>
         <div class="col-md-4">
             <h3>Who's Online</h3>
@@ -71,17 +72,23 @@
     }
     console.log("Attempting Connection...");
 
+    const offline = `<span class="badge bg-danger">Not connected</span>`;
+    const online = `<span class="badge bg-success">Connected</span>`;
+    const statusDiv = document.getElementById("status");
+
     socket.onopen = () => {
-        console.log("Successfully Connected");
-        socket.send("Hi From the Client!");
+      console.log("Successfully Connected");
+      statusDiv.innerHTML = online;
     }
 
     socket.onclose = () => {
       console.log("connection closed");
+      statusDiv.innerHTML = offline;
     }
 
     socket.onerror = () => {
       console.log("there was an error");
+      statusDiv.innerHTML = offline;
     }
 
     socket.onmessage = (msg) => {
